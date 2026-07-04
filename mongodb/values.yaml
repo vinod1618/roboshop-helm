@@ -1,0 +1,4 @@
+deployment:
+  replicas: 1
+  imageName: vinod1618/mongodb
+  imageVersion: 1.0.0
