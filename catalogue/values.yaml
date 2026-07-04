@@ -4,4 +4,4 @@ configMap:
 deployment:
   replicas: 1
   imageName: vinod1618/catalogue
-  image_version: 1.0.0
+  imageVersion: 1.0.0
