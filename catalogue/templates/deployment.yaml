@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalogue
+  namespace: roboshop
+  # these lables are deployment lables
+  labels:
+    project: roboshop
+    tier: backend
+    component: catalogue
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  selector:
+  # using these labels replica set selects the pod
+    matchLabels:
+      project: roboshop
+      tier: backend
+      component: catalogue
+# This is pod definition. pod is subset of replica set
+  template:
+    metadata:
+      labels:
+        project: roboshop
+        tier: backend
+        component: catalogue
+    spec:
+      containers:
+      - name: catalogue
+        image: {{ .Values.deployment.imageName }}:{{ .Values.deployment.imageVersion }}
+        imagePullPolicy: Always  # this is safe to pull evrytime, there may be images with same version rebuilt and pushes
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "150m"
+            memory: "150Mi"
+        #readiness probe
+
+        readinessProbe:
+          httpGet:
+              path: /health
+              port: 8080
+          failureThreshold: 2
+          periodSeconds: 10
+          initialDelaySeconds: 15
+        #liveness probe
+
+        livenessProbe:
+          tcpSocket:
+              port: 8080
+          failureThreshold: 2
+          periodSeconds: 10
+
+        envFrom:
+        - configMapRef:
+            name: catalogue

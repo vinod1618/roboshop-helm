@@ -1,0 +1,7 @@
+configMap:
+  MONGO_URL: "mongodb://mongodb/catalogue"
+
+deployment:
+  replicas: 1
+  imageName: vinod1618/catalogue
+  image_version: 1.0.0
